@@ -51,8 +51,8 @@ function fillCommonPage(c,d,model){
   field(p,d.payerCity,225,668+o,168,16,7.2,c,{align:"center"});
   field(p,d.payerPhone,398,668+o,155,16,7.2,c,{align:"center"});
   if(a){
-    const total=(+d.monthlyPrice||0)*12;
-    field(p,money(d.monthlyPrice),61,729,95,16,7.2,c);
+    const total=+d.courseValue||0,n=Math.max(1,+d.installments||1),part=total/n;
+    field(p,money(part),61,729,95,16,7.2,c);
     field(p,d.paymentMethod,157,716,66,29,6.4,c,{align:"center",multiline:true});
     field(p,"R$ 0,00",226,729,70,16,7.2,c,{align:"center"});
     field(p,d.material,299,716,111,29,6.2,c,{align:"center",multiline:true});
@@ -61,10 +61,10 @@ function fillCommonPage(c,d,model){
 }
 
 function fillAcademy(c,d){
-  const p2=c.pages[1],n=Math.min(12,Math.max(1,+d.installments||12)),dates=dueDates(d.firstDue,n,+d.dueDay||10);
+  const p2=c.pages[1],total=+d.courseValue||0,n=Math.min(12,Math.max(1,+d.installments||12)),part=total/n,dates=dueDates(d.firstDue,n,+d.dueDay||10);
   for(let i=0;i<12;i++){
     const top=49.2+(i<10?i*14.2:10*14.2+(i-10)*16.9);
-    if(i<n){draw(p2,String(i+1),64,top+2,7,c.font,c);draw(p2,brDate(dates[i]),86,top+2,7,c.font,c);draw(p2,money(d.monthlyPrice),150,top+2,7,c.font,c);if(+d.discount)draw(p2,money(d.discount),209,top+2,6.7,c.font,c)}
+    if(i<n){draw(p2,String(i+1),64,top+2,7,c.font,c);draw(p2,brDate(dates[i]),86,top+2,7,c.font,c);draw(p2,money(part),150,top+2,7,c.font,c);if(+d.discount)draw(p2,money(d.discount),209,top+2,6.7,c.font,c)}
   }
   field(p2,d.planName,61,287,162,27,7.3,c,{align:"center"});
   field(p2,String(d.planUsers||""),226,287,116,27,7.3,c,{align:"center"});
@@ -72,9 +72,9 @@ function fillAcademy(c,d){
   field(p2,brDate(d.subscriptionEnd),454,287,103,27,7.1,c,{align:"center"});
   field(p2,linesPlain(d.planCourses).join(", "),226,315,331,100,6.6,c,{multiline:true,lineHeight:8});
 
-  const p3=c.pages[2],annual=(+d.monthlyPrice||0)*12;
+  const p3=c.pages[2];
   cover(p3,59,251,494,58,c);
-  const clause=`2.5. O plano contratado pelo CONTRATANTE acima mencionado é ${d.planName}, com assinatura mensal no valor de ${money(d.monthlyPrice)} (${numberWords(d.monthlyPrice)}), totalizando o valor anual de ${money(annual)} (${numberWords(annual)}), forma de pagamento escolhida ${d.paymentMethod.toUpperCase()} com vencimento todo dia ${d.dueDay} conforme descrito no item 3.`;
+  const clause=`2.5. O plano contratado pelo CONTRATANTE acima mencionado é ${d.planName}, com vigência de 12 (doze) meses e valor total contratual de ${money(total)} (${numberWords(total)}), pago em ${n} parcela(s) de ${money(part)} (${numberWords(part)}), forma de pagamento escolhida ${d.paymentMethod.toUpperCase()} com vencimento todo dia ${d.dueDay} conforme descrito no item 3.`;
   drawWrapped(p3,clause,61,253,488,8,10.3,c.font,c);
   addSignatureDate(c.pages[5],d,c,"academy");
 }

@@ -33,4 +33,6 @@ O número do contrato é informado manualmente no primeiro campo e aparece no ca
 
 A biblioteca de geração é carregada pela internet no momento da criação do PDF. Portanto, o computador precisa estar conectado para gerar o arquivo.
 
+No contrato Academy, informe o valor total do contrato e a quantidade de parcelas. O sistema calcula automaticamente o valor de cada parcela e repete os mesmos valores no resumo, na tabela financeira e na cláusula 2.5.
+
 Antes de utilizar contratos reais, confira o conteúdo jurídico, os valores, os cursos e os módulos cadastrados.
