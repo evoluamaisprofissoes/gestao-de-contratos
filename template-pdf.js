@@ -80,7 +80,7 @@ function fillAcademy(c,d){
 }
 
 function fillPresential(c,d){
-  const p2=c.pages[1],total=(+d.courseValue||0)+(+d.enrollmentValue||0),n=Math.min(17,Math.max(1,+d.installments||1)),dates=dueDates(d.firstDue,n,+d.dueDay||10),part=total/n;
+  const p2=c.pages[1],n=Math.min(17,Math.max(1,+d.installments||1)),part=+d.courseValue||0,total=part*n+(+d.enrollmentValue||0),dates=dueDates(d.firstDue,n,+d.dueDay||10);
   field(p2,money(d.courseValue),61,63,101,28,7.2,c);
   field(p2,d.paymentMethod,163,63,61,28,6.2,c,{align:"center",multiline:true});
   field(p2,money(d.enrollmentValue),226,63,72,28,7.1,c,{align:"center"});

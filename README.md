@@ -35,4 +35,6 @@ A biblioteca de geração é carregada pela internet no momento da criação do 
 
 No contrato Academy, informe o valor total do contrato e a quantidade de parcelas. O sistema calcula automaticamente o valor de cada parcela e repete os mesmos valores no resumo, na tabela financeira e na cláusula 2.5.
 
+No contrato presencial, informe o valor de cada parcela, a quantidade de parcelas e a matrícula. O total é calculado como `valor da parcela × quantidade de parcelas + matrícula`, e os mesmos valores são usados no resumo e no PDF.
+
 Antes de utilizar contratos reais, confira o conteúdo jurídico, os valores, os cursos e os módulos cadastrados.
