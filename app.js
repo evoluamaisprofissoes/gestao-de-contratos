@@ -62,23 +62,32 @@ let selectedModel="presencial",currentStep=1;
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)],form=$("#contractForm");
 
 function init(){
- Object.keys(COURSES).forEach(v=>$("#courseName").add(new Option(v,v)));
- Object.keys(PLANS).forEach(v=>$("#planName").add(new Option(v,v)));
- setDefaults();applyCourse();applyPlan();setTrialDefaults();updateSummary();
- $$(".model-card").forEach(b=>b.onclick=()=>openForm(b.dataset.model));
- $("#backButton").onclick=()=>currentStep===1?showHome():goStep(currentStep-1);
- $("#homeButton").onclick=showHome;$("#nextStep").onclick=()=>validateStep()&&goStep(currentStep+1);$("#prevStep").onclick=()=>goStep(currentStep-1);
- $("#samePayer").onchange=togglePayer;$("#courseName").onchange=applyCourse;$("#planName").onchange=applyPlan;
- $("#courseStart").onchange=()=>setEnd("courseStart","courseEnd",COURSES[$("#courseName").value]?.months||12);
- $("#subscriptionStart").onchange=()=>setEnd("subscriptionStart","subscriptionEnd",12);
- form.elements.courseValue.addEventListener("input",()=>{if(selectedModel==="academy")syncAcademyMonthly();updateSummary()});
- form.elements.enrollmentValue.addEventListener("input",updateSummary);
- $("#installments").addEventListener("input",()=>{if(selectedModel==="academy")syncAcademyMonthly();updateSummary()});
- $("#monthlyPrice").addEventListener("input",()=>{if(selectedModel==="academy")syncAcademyTotal();updateSummary()});
- form.elements.discount.addEventListener("input",updateSummary);
- $("#firstDue").addEventListener("change",updateSummary);
- $("#trialActivationDate").addEventListener("change",()=>setTrialEnd(true));
- $$("[data-mask]").forEach(i=>i.oninput=applyMask);form.onsubmit=generatePdf;
+ try{
+  Object.keys(COURSES).forEach(v=>$("#courseName").add(new Option(v,v)));
+  Object.keys(PLANS).forEach(v=>$("#planName").add(new Option(v,v)));
+  setDefaults();applyCourse();applyPlan();setTrialDefaults();updateSummary();
+  $$(".model-card").forEach(b=>b.addEventListener("click",()=>openForm(b.dataset.model)));
+  $("#backButton").onclick=()=>currentStep===1?showHome():goStep(currentStep-1);
+  $("#homeButton").onclick=showHome;
+  $("#nextStep").onclick=()=>validateStep()&&goStep(currentStep+1);
+  $("#prevStep").onclick=()=>goStep(currentStep-1);
+  $("#samePayer").onchange=togglePayer;
+  $("#courseName").onchange=applyCourse;
+  $("#planName").onchange=applyPlan;
+  $("#courseStart").onchange=()=>setEnd("courseStart","courseEnd",COURSES[$("#courseName").value]?.months||12);
+  $("#subscriptionStart").onchange=()=>setEnd("subscriptionStart","subscriptionEnd",12);
+  form.elements.courseValue.addEventListener("input",()=>{if(selectedModel==="academy")syncAcademyMonthly();updateSummary()});
+  form.elements.enrollmentValue.addEventListener("input",updateSummary);
+  $("#installments").addEventListener("input",()=>{if(selectedModel==="academy")syncAcademyMonthly();updateSummary()});
+  $("#monthlyPrice").addEventListener("input",()=>{if(selectedModel==="academy")syncAcademyTotal();updateSummary()});
+  form.elements.discount.addEventListener("input",updateSummary);
+  $("#firstDue").addEventListener("change",updateSummary);
+  $("#trialActivationDate").addEventListener("change",()=>setTrialEnd(true));
+  $$('[data-mask]').forEach(i=>i.addEventListener("input",applyMask));
+  form.onsubmit=generatePdf;
+ }catch(err){
+  console.error("Falha ao inicializar Gestão de Contratos:",err);
+ }
 }
 function openForm(model){selectedModel=model;currentStep=1;$("#startScreen").classList.remove("active");$("#formScreen").classList.add("active");const a=model==="academy",t=model==="trial";$("#formTitle").textContent=t?"Termo de Compromisso de Acesso Gratuito":a?"Contrato Evolua+ Academy":"Contrato Presencial";$("#formEyebrow").textContent=t?"ACESSO EXPERIMENTAL":a?"ASSINATURA DIGITAL":"ENSINO PRESENCIAL";$("#trialFields").hidden=!t;$("#standardStudentFields").hidden=t;$("#presentialFields").hidden=a||t;$("#academyFields").hidden=!a;$("#courseValueField").hidden=t;$("#enrollmentField").hidden=a||t;$("#paymentSummary").hidden=t;$("#installments").max=a?12:36;$("#step1Title").textContent=t?"Dados para liberação":"Dados do aluno";$("#step1Subtitle").textContent=t?"Informe os dados necessários para liberar o acesso experimental.":"Informações da pessoa que realizará o curso.";if(t){setTrialDefaults()}else if(a){$("#installments").value=12;applyPlan()}goStep(1);updateSummary()}
 function showHome(){$("#formScreen").classList.remove("active");$("#startScreen").classList.add("active");scrollTo(0,0)}

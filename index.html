@@ -30,7 +30,7 @@
         <p>Escolha o modelo, preencha os dados e receba o PDF pronto para assinatura.</p>
       </div>
       <div class="model-grid">
-        <button class="model-card presencial" type="button" data-model="presencial">
+        <button class="model-card presencial" type="button" data-model="presencial" onclick="openForm('presencial')">
           <div class="card-icon">🏫</div>
           <div>
             <span class="tag">ENSINO PRESENCIAL</span>
@@ -39,7 +39,7 @@
           </div>
           <b>Começar <span>→</span></b>
         </button>
-        <button class="model-card academy" type="button" data-model="academy">
+        <button class="model-card academy" type="button" data-model="academy" onclick="openForm('academy')">
           <div class="card-icon">✦</div>
           <div>
             <span class="tag">ASSINATURA DIGITAL</span>
@@ -48,7 +48,7 @@
           </div>
           <b>Começar <span>→</span></b>
         </button>
-        <button class="model-card trial" type="button" data-model="trial">
+        <button class="model-card trial" type="button" data-model="trial" onclick="openForm('trial')">
           <div class="card-icon">🎟️</div>
           <div>
             <span class="tag">ACESSO EXPERIMENTAL</span>
@@ -189,6 +189,6 @@
   <div id="pdfMount" aria-hidden="true"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" referrerpolicy="no-referrer"></script>
   <script src="template-pdf.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=20260904-2"></script>
 </body>
 </html>
