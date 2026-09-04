@@ -48,6 +48,15 @@
           </div>
           <b>Começar <span>→</span></b>
         </button>
+        <button class="model-card trial" type="button" data-model="trial">
+          <div class="card-icon">🎟️</div>
+          <div>
+            <span class="tag">ACESSO EXPERIMENTAL</span>
+            <h2>Teste Gratuito · 7 dias</h2>
+            <p>Termo de compromisso para liberar o acesso gratuito à plataforma e aos mini-cursos.</p>
+          </div>
+          <b>Começar <span>→</span></b>
+        </button>
       </div>
       <div class="steps-row">
         <span><b>1</b> Escolha o modelo</span>
@@ -70,7 +79,23 @@
 
       <form id="contractForm" novalidate>
         <div class="form-step active" data-step="1">
-          <div class="section-title"><span>01</span><div><h2>Dados do aluno</h2><p>Informações da pessoa que realizará o curso.</p></div></div>
+          <div class="section-title"><span>01</span><div><h2 id="step1Title">Dados do aluno</h2><p id="step1Subtitle">Informações da pessoa que realizará o curso.</p></div></div>
+          <div id="trialFields" hidden>
+            <div class="trial-intro">
+              <strong>Liberação gratuita por até 7 dias</strong>
+              <span>O acesso é experimental, gratuito e não gera mensalidade, taxa, multa ou obrigação de matrícula.</span>
+            </div>
+            <div class="field-grid">
+              <label class="wide">Aluno(a)<input name="trialStudentName" autocomplete="name"></label>
+              <label>CPF<input name="trialStudentCpf" data-mask="cpfcnpj"></label>
+              <label>E-mail<input type="email" name="trialStudentEmail" autocomplete="email"></label>
+              <label>Telefone<input name="trialStudentPhone" data-mask="phone"></label>
+              <label>Data de ativação<input type="date" name="trialActivationDate"></label>
+              <label>Data prevista de encerramento<input type="date" name="trialEndDate" readonly></label>
+            </div>
+            <div class="trial-note">O encerramento é calculado automaticamente para 7 dias corridos após a ativação.</div>
+          </div>
+          <div id="standardStudentFields">
           <div class="field-grid">
             <label class="full">Número do contrato<input name="contractNumber" required placeholder="Ex.: 260724001"></label>
             <label class="wide">Nome completo ou razão social<input name="studentName" required autocomplete="name"></label>
@@ -87,6 +112,7 @@
             <label>CEP<input name="studentCep" data-mask="cep"></label>
             <label>Cidade<input name="studentCity" value="Mirassol D’Oeste" required></label>
             <label>UF<input name="studentState" value="MT" maxlength="2" required></label>
+          </div>
           </div>
         </div>
 
@@ -137,7 +163,7 @@
         <div class="form-step" data-step="4">
           <div class="section-title"><span>04</span><div><h2>Valores e pagamento</h2><p>O sistema calculará totais, parcelas, vencimentos e valores por extenso.</p></div></div>
           <div class="field-grid">
-            <label id="courseValueField"><span id="courseValueLabel">Valor de cada parcela (R$)</span><input type="number" min="0" step="0.01" name="courseValue" value="332"></label>
+            <label id="courseValueField"><span id="courseValueLabel">Valor do curso (R$)</span><input type="number" min="0" step="0.01" name="courseValue" value="3984"></label>
             <label id="enrollmentField">Matrícula (R$)<input type="number" min="0" step="0.01" name="enrollmentValue" value="249"></label>
             <label>Forma de pagamento<select name="paymentMethod" id="paymentMethod"><option>Boleto bancário</option><option>Cartão de crédito</option><option>PIX</option><option>Cartão de débito</option><option>Dinheiro</option></select></label>
             <label>Quantidade de parcelas<input type="number" min="1" max="36" name="installments" id="installments" value="12"></label>

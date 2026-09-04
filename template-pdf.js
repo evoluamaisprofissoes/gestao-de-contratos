@@ -4,7 +4,7 @@ const A4_W=595.28,A4_H=841.89,SRC_W=612,SRC_H=792,SX=A4_W/SRC_W,SY=A4_H/SRC_H;
 async function generateContractFromTemplate(d,model){
   if(!window.PDFLib)throw new Error("Biblioteca de PDF indisponível");
   const {PDFDocument,StandardFonts,rgb}=PDFLib;
-  const template=model==="academy"?"assets/modelo-academy.pdf":"assets/modelo-presencial.pdf";
+  const template=model==="academy"?"assets/modelo-academy.pdf":model==="trial"?"assets/modelo-trial.pdf":"assets/modelo-presencial.pdf";
   const sourceBytes=await fetch(template).then(r=>{if(!r.ok)throw new Error("Modelo não encontrado");return r.arrayBuffer()});
   const source=await PDFDocument.load(sourceBytes);
   const out=await PDFDocument.create();
@@ -13,11 +13,33 @@ async function generateContractFromTemplate(d,model){
   const bold=await out.embedFont(StandardFonts.HelveticaBold);
   const pages=embedded.map(ep=>{const p=out.addPage([A4_W,A4_H]);p.drawPage(ep,{x:0,y:0,width:A4_W,height:A4_H});return p});
   const ctx={pages,font,bold,white:rgb(1,1,1),black:rgb(0,0,0)};
-  fillCommonPage(ctx,d,model);
-  if(model==="academy")fillAcademy(ctx,d);else fillPresential(ctx,d);
+  if(model==="trial")fillTrial(ctx,d);
+  else {
+    fillCommonPage(ctx,d,model);
+    if(model==="academy")fillAcademy(ctx,d);else fillPresential(ctx,d);
+  }
   const bytes=await out.save();
-  const number=safeFile(d.contractNumber||"sem-numero"),name=safeFile(d.studentName||"contrato");
-  downloadBytes(bytes,`Contrato-${number}-${model==="academy"?"Academy":"Presencial"}-${name}.pdf`);
+  const number=safeFile(d.contractNumber||"");
+  const name=safeFile(d.studentName||"contrato");
+  const prefix=model==="trial"?"Termo-Acesso-Gratuito":model==="academy"?"Contrato-Academy":"Contrato-Presencial";
+  const fileName=number?`${prefix}-${number}-${name}.pdf`:`${prefix}-${name}.pdf`;
+  downloadBytes(bytes,fileName);
+}
+
+function fillTrial(c,d){
+  const p=c.pages[0];
+  const TW=595.304,TH=841.89;
+  const coverT=(x,top,w,h)=>p.drawRectangle({x,y:TH-(top+h),width:w,height:h,color:c.white});
+  const drawT=(text,x,top,size,font=c.font)=>{const s=sanitize(text);p.drawText(s,{x,y:TH-(top+size),size,font,color:c.black})};
+  const fittedT=(text,x,top,w,size)=>{let s=sanitize(text),z=size;while(z>5&&c.font.widthOfTextAtSize(s,z)>w)z-=.25;drawT(s,x,top,z)};
+  const centeredT=(text,x,top,w,size)=>{const s=sanitize(text),tw=c.font.widthOfTextAtSize(s,size);drawT(s,x+Math.max(0,(w-tw)/2),top,size)};
+  const date=brDate(d.activationDate),end=brDate(d.trialEndDate);
+  coverT(98,297,274,18); fittedT(d.studentName||"",101,300,268,9.2);
+  coverT(415,297,118,18); fittedT(d.studentCpf||"",418,300,112,9.2);
+  coverT(90,318,279,18); fittedT(d.studentEmail||"",93,321,273,8.8);
+  coverT(415,318,118,18); fittedT(d.studentPhone||"",418,321,112,9.2);
+  coverT(127,345,83,15); centeredT(date,127,347,83,9.2);
+  coverT(379,353,84,15); centeredT(end,379,355,84,9.2);
 }
 
 function fillCommonPage(c,d,model){
@@ -80,7 +102,7 @@ function fillAcademy(c,d){
 }
 
 function fillPresential(c,d){
-  const p2=c.pages[1],n=Math.min(17,Math.max(1,+d.installments||1)),part=+d.courseValue||0,total=part*n+(+d.enrollmentValue||0),dates=dueDates(d.firstDue,n,+d.dueDay||10);
+  const p2=c.pages[1],total=(+d.courseValue||0)+(+d.enrollmentValue||0),n=Math.min(17,Math.max(1,+d.installments||1)),dates=dueDates(d.firstDue,n,+d.dueDay||10),part=total/n;
   field(p2,money(d.courseValue),61,63,101,28,7.2,c);
   field(p2,d.paymentMethod,163,63,61,28,6.2,c,{align:"center",multiline:true});
   field(p2,money(d.enrollmentValue),226,63,72,28,7.1,c,{align:"center"});
