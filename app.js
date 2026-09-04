@@ -98,7 +98,7 @@ function applyCourse(){const c=COURSES[$("#courseName").value];if(!c)return;$("#
 function applyPlan(){const p=PLANS[$("#planName").value];if(!p)return;$("#planUsers").value=p.users;$("#monthlyPrice").value=p.price;$("#planCourses").value=p.courses.join("\n");if(selectedModel==="academy")syncAcademyTotal();updateSummary()}
 function setDefaults(){const d=new Date(),iso=dateInput(d);["courseStart","subscriptionStart","firstDue"].forEach(id=>$("#"+id).value=iso);setEnd("courseStart","courseEnd",12);setEnd("subscriptionStart","subscriptionEnd",12)}
 function setTrialDefaults(){const d=new Date(),iso=dateInput(d);if(!$("#trialActivationDate").value)$("#trialActivationDate").value=iso;setTrialEnd(false)}
-function setTrialEnd(force){const start=localDate($("#trialActivationDate").value);if(!start)return;const end=new Date(start);end.setDate(end.getDate()+7);$("#trialEndDate").value=dateInput(end)}
+function setTrialEnd(force){const start=localDate($("#trialActivationDate").value);if(!start)return;const end=new Date(start);end.setDate(end.getDate()+7);if(force || !$("#trialEndDate").value)$("#trialEndDate").value=dateInput(end)}
 function setEnd(s,e,m){const d=localDate($("#"+s).value);if(!d)return;d.setMonth(d.getMonth()+m);d.setDate(d.getDate()-1);$("#"+e).value=dateInput(d)}
 function syncAcademyTotal(){const n=Math.max(1,+$("#installments").value||1);form.elements.courseValue.value=((+$("#monthlyPrice").value||0)*n).toFixed(2)}
 function syncAcademyMonthly(){const n=Math.max(1,+$("#installments").value||1);$("#monthlyPrice").value=((+form.elements.courseValue.value||0)/n).toFixed(2)}

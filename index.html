@@ -90,10 +90,10 @@
               <label>CPF<input name="trialStudentCpf" data-mask="cpfcnpj"></label>
               <label>E-mail<input type="email" name="trialStudentEmail" autocomplete="email"></label>
               <label>Telefone<input name="trialStudentPhone" data-mask="phone"></label>
-              <label>Data de ativação<input type="date" name="trialActivationDate"></label>
-              <label>Data prevista de encerramento<input type="date" name="trialEndDate" readonly></label>
+              <label>Data de ativação<input type="date" id="trialActivationDate" name="trialActivationDate" required></label>
+              <label>Data prevista de encerramento<input type="date" id="trialEndDate" name="trialEndDate" required></label>
             </div>
-            <div class="trial-note">O encerramento é calculado automaticamente para 7 dias corridos após a ativação.</div>
+            <div class="trial-note">O encerramento é calculado automaticamente para 7 dias corridos após a ativação, mas você pode ajustar a data manualmente.</div>
           </div>
           <div id="standardStudentFields">
           <div class="field-grid">
@@ -189,6 +189,6 @@
   <div id="pdfMount" aria-hidden="true"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" referrerpolicy="no-referrer"></script>
   <script src="template-pdf.js"></script>
-  <script src="app.js?v=20260904-2"></script>
+  <script src="app.js?v=20260904-3"></script>
 </body>
 </html>
